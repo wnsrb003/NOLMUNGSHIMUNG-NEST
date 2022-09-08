@@ -8,7 +8,7 @@ export class ProjectsController {
     constructor(private projectService: ProjectsService) {}
 
     @Get('/')
-    getProjects(){
+    getProjects(@Body() body){
         return this.projectService.getProjects();
     }
     @Get('/:id')
@@ -16,7 +16,7 @@ export class ProjectsController {
         return this.projectService.getProjectById(id);
     }
 
-    @Post()
+    @Post('/')
     createProject(@Body() createProjectDto: CreateProjectDto){
         return this.projectService.createProject(createProjectDto);
     }
