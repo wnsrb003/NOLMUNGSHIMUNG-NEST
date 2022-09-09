@@ -1,9 +1,13 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/users/get-user.decorator';
+import { User } from 'src/users/user.entity';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { Project } from './projects.entity';
 import { ProjectsService } from './projects.service';
 
 @Controller('projects')
+@UseGuards(AuthGuard())
 export class ProjectsController {
     constructor(private projectService: ProjectsService) {}
 
@@ -17,7 +21,9 @@ export class ProjectsController {
     }
 
     @Post('/')
-    createProject(@Body() createProjectDto: CreateProjectDto){
-        return this.projectService.createProject(createProjectDto);
+    createProject(
+        @Body() createProjectDto: CreateProjectDto,
+        @GetUser() user : User){
+        return this.projectService.createProject(createProjectDto[1], user);
     }
 }

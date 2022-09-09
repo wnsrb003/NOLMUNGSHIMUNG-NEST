@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { rejects } from 'assert/strict';
 import { resolve } from 'path';
+import { User } from 'src/users/user.entity';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { Project } from './projects.entity';
 import { ProjectRepository } from './projects.repository';
@@ -17,7 +18,7 @@ export class ProjectsService {
     return this.projectRepository.getProjectById(id);
   }
 
-  async createProject(createProjectDto: CreateProjectDto): Promise<Project> {
-    return this.projectRepository.createProject(createProjectDto);
+  async createProject(createProjectDto: CreateProjectDto, user: User): Promise<Project> {
+    return this.projectRepository.createProject(createProjectDto, user);
   }
 }

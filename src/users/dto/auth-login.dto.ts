@@ -1,0 +1,18 @@
+import { IsEmail, IsNotEmpty, IsString, Matches, maxLength, MaxLength, minLength, MinLength } from "class-validator";
+
+export class AuthLoginDto {
+    
+    @IsNotEmpty()
+    @IsString()
+    @MinLength(4)
+    @MaxLength(20)
+    @Matches(/^[a-zA-Z0-9]*$/, {
+        message: '비밀번호 영문자, 숫자만 사용하세요'
+    })
+    password: string;
+
+    @IsNotEmpty()
+    @IsEmail()
+    user_email: string;
+
+}

@@ -1,3 +1,4 @@
+import { User } from "src/users/user.entity";
 import { EntityRepository, Repository } from "typeorm";
 import { CreateProjectDto } from "./dto/create-project.dto";
 import { Project } from "./projects.entity";
@@ -9,30 +10,36 @@ export class ProjectRepository extends Repository<Project> {
         return project;
     }
 
-    async createProject(createProjectDto: CreateProjectDto): Promise<Project>{
+    async createProject(createProjectDto: CreateProjectDto, user: User): Promise<Project>{
+        console.log(createProjectDto, user);
+        
         const {
             start_date,
             end_date,
             term,
             project_title,
-            routes,
-            quillRefEditor,
-            log,
-            upload_flag,
+            // routes,
+            // quillRefEditor,
+            // log,
+            // upload_flag,
           } = createProjectDto;
           const newProject = this.create({
-              user_email: 'user_email',
-              user_name: 'user_name',
+              user_email: user.user_email,
+              user_name: user.user_name,
               start_date,
               end_date,
               term,
               project_title,
-              routes,
-              quillRefEditor,
-              log,
-              upload_flag,
-              trip_date: "trip_date",
-              // people: "people"
+              routes: '[]',
+              quillRefEditor: '',
+              log: '',
+              upload_flag: '',
+              trip_date: '',
+              people: JSON.stringify([
+                user.id,
+                user.user_name,
+                user.user_email,
+              ])
           });
       
           await this.save(newProject);

@@ -1,5 +1,5 @@
-import { User } from "src/auth/user.entity";
-import { BaseEntity, Column, Entity, ManyToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { User } from "src/users/user.entity";
+import { BaseEntity, Column, Entity, ManyToMany, OneToOne, PrimaryGeneratedColumn, Unique } from "typeorm";
 
 @Entity()
 // @Unique(['projectId'])
@@ -40,6 +40,7 @@ export class Project extends BaseEntity{
     @Column()
     trip_date: string;
 
-    // @ManyToMany(type => User, user => user.user_email, {eager: true})
-    // people: string;
+    // @OneToOne(type => User, user => user.user_email, {eager: true})
+    @Column()
+    people: string;
 }
