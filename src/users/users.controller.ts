@@ -4,7 +4,6 @@ import { AuthService } from './users.service';
 import { AuthCredentialDto } from '../users/dto/auth-credential.dto';
 import { GetUser } from './get-user.decorator';
 import { User } from './user.entity';
-import { signupMail } from '../utils/mail/mail';
 import { Response } from 'express';
 import { AuthLoginDto } from './dto/auth-login.dto';
 import * as cookie from 'cookie';
