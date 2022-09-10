@@ -26,9 +26,17 @@ export class AuthService {
 
         if (user && (await bcrypt.compare(password, user.password))){
             const payload = { user_email };
-            const accessToken = await this.jwtService.sign(payload);
-            
-            return { user, accessToken };
+            const accessToken = await this.jwtService.sign(payload, {
+                secret: process.env.USER,
+                expiresIn: 60 * 60,
+            });
+            const refreshToken = await this.jwtService.sign(payload, {
+                secret: process.env.USER,
+                expiresIn: 60 * 60 * 24,
+            });
+
+            this.UserRepository.update(user_email, { refresh_token: refreshToken })
+            return { user, accessToken, refreshToken };
         }
         throw new UnauthorizedException('계정 정보가 맞지 않아');
     }
@@ -44,5 +52,9 @@ export class AuthService {
         // if (await signupMail(certificationNumber, user_email)) {
         // };
     } 
-        
+    
+    async updateUserProjects(user: User, projectId: number){
+        (user.user_projects)? JSON.parse(user.user_projects).push(projectId): [].push(projectId)
+        this.UserRepository.save(user);
+    }
 }

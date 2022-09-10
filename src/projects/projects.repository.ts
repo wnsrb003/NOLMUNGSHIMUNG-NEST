@@ -11,8 +11,6 @@ export class ProjectRepository extends Repository<Project> {
     }
 
     async createProject(createProjectDto: CreateProjectDto, user: User): Promise<Project>{
-        console.log(createProjectDto, user);
-        
         const {
             start_date,
             end_date,
@@ -43,6 +41,7 @@ export class ProjectRepository extends Repository<Project> {
           });
       
           await this.save(newProject);
+          newProject['projectId'] = newProject.id;
           return newProject;
     }
 }

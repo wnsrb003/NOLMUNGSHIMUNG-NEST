@@ -2,14 +2,15 @@ import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/users/get-user.decorator';
 import { User } from 'src/users/user.entity';
+import { AuthService } from 'src/users/users.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { Project } from './projects.entity';
 import { ProjectsService } from './projects.service';
 
 @Controller('projects')
-@UseGuards(AuthGuard())
+// @UseGuards(AuthGuard())
 export class ProjectsController {
-    constructor(private projectService: ProjectsService) {}
+    constructor(private projectService: ProjectsService, private authService: AuthService) {}
 
     @Get('/')
     getProjects(@Body() body){
@@ -21,9 +22,18 @@ export class ProjectsController {
     }
 
     @Post('/')
-    createProject(
-        @Body() createProjectDto: CreateProjectDto,
-        @GetUser() user : User){
-        return this.projectService.createProject(createProjectDto[1], user);
+    async createProject(@Body() createProjectDto: CreateProjectDto){
+        const user_email = createProjectDto[0];
+        const user: User = await this.authService.findUserByEmail(user_email);
+        const rtn = await this.projectService.createProject(createProjectDto[1], user);
+        if(rtn) this.authService.updateUserProjects(user, rtn.id);
+        return rtn;
+    }
+
+    @Post('/title')
+    getTitle(@Body() projectId){
+        console.log('!!!!', projectId);
+        return 0;
+        // return this.projectService.getProjectById(projectId);
     }
 }

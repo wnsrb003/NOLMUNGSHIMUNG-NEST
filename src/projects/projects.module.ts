@@ -8,9 +8,9 @@ import { ProjectsService } from './projects.service';
 @Module({
   imports: [
     TypeOrmModule.forFeature([ProjectRepository]),
-    AuthModule
+    AuthModule,
   ],
   controllers: [ProjectsController],
-  providers: [ProjectsService]
+  providers: [ProjectsService],
 })
 export class ProjectsModule {}

@@ -24,23 +24,34 @@ export class AuthController {
         };
     }
 
+    
     @Post('/signin')
     @UsePipes(ValidationPipe)
     async siginIn(
         @Body() AuthLoginDto: AuthLoginDto, 
         @Res() res: Response) {
-            const { user, accessToken} = await this.authService.signIn(AuthLoginDto, res);
-            console.log(accessToken);
-            
+            const { user, accessToken, refreshToken} = await this.authService.signIn(AuthLoginDto, res);
+            const accessTokenOptions = {
+                sameSite: "none",
+                secure: true,
+              };
+              
+            const refreshTokenOptions = {
+            httpOnly: true,
+            sameSite: "none",
+            secure: true,
+            };
+
             res.setHeader("Set-Cookie", [
-                // cookie.serialize(
-                //   "w_refresh",
-                //   user.userRefreshToken,
-                //   refreshTokenOptions
-                // ),
+                cookie.serialize(
+                  "w_refresh",
+                  refreshToken,
+                  refreshTokenOptions
+                ),
                 cookie.serialize(
                     "w_access",
-                    accessToken
+                    accessToken,
+                    accessTokenOptions
                 ),
             ]);
             return res.status(200).json({
@@ -56,7 +67,6 @@ export class AuthController {
     @Post('/mail')
     async checkEmail(@Body() user_email: string){
         const user = await this.authService.findUserByEmail(user_email);
-        console.log(user);
         
         if(user) throw new BadRequestException('동일한 이메일이 있어.');
         return this.authService.getCertificationNumber()

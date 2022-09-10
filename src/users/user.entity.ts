@@ -59,4 +59,9 @@ export class User extends BaseEntity{
         default: ''
     })
     user_projects?: string | null;
+
+    @Column({
+        nullable: true
+    })
+    refresh_token?: string | null;
 }
