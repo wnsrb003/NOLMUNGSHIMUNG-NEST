@@ -6,7 +6,7 @@ import { Project } from "./projects.entity";
 @EntityRepository(Project)
 export class ProjectRepository extends Repository<Project> {
     async getProjectById(id: number): Promise<Project>{
-        const project = await this.findOne(id);
+        const project = await this.findOne(id, { relations: ["people"]});
         return project;
     }
 
@@ -33,14 +33,10 @@ export class ProjectRepository extends Repository<Project> {
               log: '',
               upload_flag: '',
               trip_date: '',
-              people: JSON.stringify([
-                user.id,
-                user.user_name,
-                user.user_email,
-              ])
           });
-      
+
           await this.save(newProject);
+
           newProject['projectId'] = newProject.id;
           return newProject;
     }

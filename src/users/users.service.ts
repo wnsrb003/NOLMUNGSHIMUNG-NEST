@@ -35,7 +35,7 @@ export class AuthService {
                 expiresIn: 60 * 60 * 24,
             });
 
-            this.UserRepository.update(user_email, { refresh_token: refreshToken })
+            // this.UserRepository.update(user_email, { refresh_token: refreshToken })
             return { user, accessToken, refreshToken };
         }
         throw new UnauthorizedException('계정 정보가 맞지 않아');
@@ -53,8 +53,14 @@ export class AuthService {
         // };
     } 
     
-    async updateUserProjects(user: User, projectId: number){
-        (user.user_projects)? JSON.parse(user.user_projects).push(projectId): [].push(projectId)
-        this.UserRepository.save(user);
+    async updateUserProjects(user_email: string, projectId: number){
+        // console.log('111: ', user_email, projectId);
+        // const user = await this.UserRepository.findUserByEmail(user_email)
+        // const newUserProjects = user.user_projects? user.user_projects: [];
+        // newUserProjects.push(projectId);
+        // user.user_projects = newUserProjects;
+        // console.log('2111: ', user);
+        // const data = await this.UserRepository.update({user_email}, {user_projects: JSON.stringify(newUserProjects)});
+        // console.log('333: ', data);
     }
 }

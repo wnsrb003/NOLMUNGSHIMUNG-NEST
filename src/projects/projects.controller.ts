@@ -16,6 +16,7 @@ export class ProjectsController {
     getProjects(@Body() body){
         return this.projectService.getProjects();
     }
+
     @Get('/:id')
     getProjectById(@Param('id') id: number):Promise<Project>{
         return this.projectService.getProjectById(id);
@@ -26,14 +27,30 @@ export class ProjectsController {
         const user_email = createProjectDto[0];
         const user: User = await this.authService.findUserByEmail(user_email);
         const rtn = await this.projectService.createProject(createProjectDto[1], user);
-        if(rtn) this.authService.updateUserProjects(user, rtn.id);
+        // if(rtn) this.authService.updateUserProjects(user_email, rtn.id);
         return rtn;
     }
 
     @Post('/title')
-    getTitle(@Body() projectId){
-        console.log('!!!!', projectId);
-        return 0;
+    async getTitle(@Body() projectIds){
+        const projectInfo = []
+        for (let i=0; i<projectIds.length; i++){
+            projectInfo.push(await this.projectService.getProjectById(projectIds[i])) 
+        };
+        return {
+            success: true,
+            projectInfo: projectInfo,
+            message: "여행일정 제목을 성공적으로 불러왔습니다.",
+            }
         // return this.projectService.getProjectById(projectId);
+    }
+
+    @Get('/friends/:id')
+    async getFriends(@Param() projectId: number){
+        const people = await (await this.projectService.getProjectById(projectId)).people
+        const friends = []
+        // for (let i=0; i<people.length; )
+        console.log(people)
+        return people;
     }
 }

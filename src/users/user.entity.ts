@@ -1,6 +1,6 @@
 import { Project } from "src/projects/projects.entity";
 import { text } from "stream/consumers";
-import { BaseEntity, Column, Entity, IsNull, ManyToMany, OneToOne, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { BaseEntity, Column, Entity, IsNull, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, Unique } from "typeorm";
 
 @Entity()
 @Unique(['user_email'])
@@ -53,15 +53,16 @@ export class User extends BaseEntity{
     })
     provider?: string | null;
 
-    // @OneToOne(type => Project, project => project.id, {eager: true})
+    @ManyToMany(type => Project, project => project.people)
+    // @JoinTable()
+    // @ManyToMany(() => Project), (project) => project.people)
+    // @JoinTable()
+    // @Column()
+    user_projects: Project[]
+
     @Column({
         nullable: true,
         default: ''
-    })
-    user_projects?: string | null;
-
-    @Column({
-        nullable: true
     })
     refresh_token?: string | null;
 }
