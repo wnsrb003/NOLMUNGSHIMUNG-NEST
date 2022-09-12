@@ -7,6 +7,7 @@ import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { AuthLoginDto } from './dto/auth-login.dto';
+import { Project } from 'src/projects/projects.entity';
 
 @Injectable()
 export class AuthService {
@@ -53,9 +54,11 @@ export class AuthService {
         // };
     } 
     
-    async updateUserProjects(user_email: string, projectId: number){
+    async updateUserProjects(user: User,  project: Project){
         // console.log('111: ', user_email, projectId);
-        // const user = await this.UserRepository.findUserByEmail(user_email)
+        user.user_projects = [project]
+        const data = await this.UserRepository.save(user)
+        console.log(data)
         // const newUserProjects = user.user_projects? user.user_projects: [];
         // newUserProjects.push(projectId);
         // user.user_projects = newUserProjects;

@@ -74,10 +74,13 @@ export class AuthController {
 
     @Get('/auth')
     @UseGuards(AuthGuard())
-    test(@GetUser() user: User){
+    async test(@GetUser() user: User){
+        const data = await this.authService.findUserByEmail(user.user_email);
+        // console.log(data);
+        
         return {
             success: true,
-            user_name: user,
+            user_name: data,
             isAuth: true,
         }
     }

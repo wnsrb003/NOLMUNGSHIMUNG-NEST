@@ -10,7 +10,9 @@ import { ProjectsService } from './projects.service';
 @Controller('projects')
 // @UseGuards(AuthGuard())
 export class ProjectsController {
-    constructor(private projectService: ProjectsService, private authService: AuthService) {}
+    constructor(
+        private projectService: ProjectsService, 
+        private authService: AuthService) {}
 
     @Get('/')
     getProjects(@Body() body){
@@ -27,7 +29,7 @@ export class ProjectsController {
         const user_email = createProjectDto[0];
         const user: User = await this.authService.findUserByEmail(user_email);
         const rtn = await this.projectService.createProject(createProjectDto[1], user);
-        // if(rtn) this.authService.updateUserProjects(user_email, rtn.id);
+        if(rtn) this.authService.updateUserProjects(user, rtn);
         return rtn;
     }
 

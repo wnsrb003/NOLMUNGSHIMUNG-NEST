@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserProjectsRepository } from 'src/users/user-project.repository';
 import { AuthModule } from 'src/users/users.module';
 import { ProjectsController } from './projects.controller';
 import { ProjectRepository } from './projects.repository';

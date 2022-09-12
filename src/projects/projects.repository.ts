@@ -9,7 +9,7 @@ export class ProjectRepository extends Repository<Project> {
         const project = await this.findOne(id, { relations: ["people"]});
         return project;
     }
-
+ 
     async createProject(createProjectDto: CreateProjectDto, user: User): Promise<Project>{
         const {
             start_date,
@@ -33,10 +33,11 @@ export class ProjectRepository extends Repository<Project> {
               log: '',
               upload_flag: '',
               trip_date: '',
+              people: [user]
           });
 
           await this.save(newProject);
-
+          
           newProject['projectId'] = newProject.id;
           return newProject;
     }

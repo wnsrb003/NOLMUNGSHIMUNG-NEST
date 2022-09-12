@@ -25,7 +25,7 @@ export class UserRepository extends Repository<User> {
     }
 
     async findUserByEmail(user_email: string): Promise<User> {        
-        const user = await this.findOne({user_email});
+        const user = await this.findOne({user_email}, {relations: ['user_projects']});
         
         return user;
 

@@ -1,6 +1,7 @@
 import { Project } from "src/projects/projects.entity";
 import { text } from "stream/consumers";
 import { BaseEntity, Column, Entity, IsNull, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { UserProjects } from "./user-project.entity";
 
 @Entity()
 @Unique(['user_email'])
@@ -53,13 +54,13 @@ export class User extends BaseEntity{
     })
     provider?: string | null;
 
-    @ManyToMany(type => Project, project => project.people)
-    // @JoinTable()
-    // @ManyToMany(() => Project), (project) => project.people)
-    // @JoinTable()
-    // @Column()
-    user_projects: Project[]
+    // @OneToMany(type => UserProjects, userproject => userproject.user_project, {eager: true})
+    // user_projects: Promise<UserProjects[]>
 
+    @ManyToMany(() => Project)
+    @JoinTable()
+    user_projects: Project[]
+    
     @Column({
         nullable: true,
         default: ''
