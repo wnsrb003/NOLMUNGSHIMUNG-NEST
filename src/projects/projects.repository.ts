@@ -7,6 +7,7 @@ import { Project } from "./projects.entity";
 export class ProjectRepository extends Repository<Project> {
     async getProjectById(id: number): Promise<Project>{
         const project = await this.findOne(id, { relations: ["people"]});
+        project.routes = '[]'
         return project;
     }
  

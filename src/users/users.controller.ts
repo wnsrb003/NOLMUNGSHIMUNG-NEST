@@ -32,14 +32,14 @@ export class AuthController {
         @Res() res: Response) {
             const { user, accessToken, refreshToken} = await this.authService.signIn(AuthLoginDto, res);
             const accessTokenOptions = {
-                sameSite: "none",
+                sameSite: true,
                 secure: true,
               };
               
             const refreshTokenOptions = {
-            httpOnly: true,
-            sameSite: "none",
-            secure: true,
+                httpOnly: true,
+                sameSite: true,
+                secure: true,
             };
 
             res.setHeader("Set-Cookie", [
